@@ -2,7 +2,7 @@
 
 ### The code presented here is a C code that create a shared library for hooking pcap_loop function that originally used by libpcap.
 #### The shared library can hide traffic that used specific tcp port specified by the int: *mystery_tcp_port* (The default is 4200).
-#### After compiling the library, the command `make install` injects it in the file **/etc/ld.so.preload**. This file calls the shared library before any other library everytime you run a program on your machine.
+#### After compiling the library, the command `make install` injects library path in the file **/etc/ld.so.preload**. This file calls the shared library before any other library everytime you run a program on your machine.
 
 ###### Compile and Install 
 To compile the shared library just use: 
