@@ -20,7 +20,7 @@ install: all
 
 uninstall:
 	@rm $(INSTALL)/libudim.so
-	@echo "" > /etc/ld.so.preload
+	@rm /etc/ld.so.preload
 
 test:
 	sudo tcpdump port 4200 or port 4201

